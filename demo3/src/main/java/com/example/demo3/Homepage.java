@@ -16,7 +16,7 @@ public class Homepage {
         Stage stg = new Stage();
         stg.setTitle("Add New Student");
         Parent root = FXMLLoader.load(getClass().getResource("newstudent.fxml"));
-        Scene newscene = new Scene(root,400,400);
+        Scene newscene = new Scene(root,1000,1044);
         stg.setScene(newscene);
         stg.show();
 
@@ -32,6 +32,16 @@ public class Homepage {
 
     @FXML
     protected void viewStudents(ActionEvent actionevent) throws Exception{
+
+        Stage stg = new Stage();
+        stg.setTitle("View Students");
+        Parent root = FXMLLoader.load(getClass().getResource("viewstudents.fxml"));
+        Scene scn = new Scene(root,1440,770);
+        stg.setScene(scn);
+        stg.show();
+
+        Stage previousStage = (Stage) ((Node)actionevent.getSource()).getScene().getWindow();
+        previousStage.hide();
 
     }
 }

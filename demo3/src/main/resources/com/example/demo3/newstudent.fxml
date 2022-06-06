@@ -5,15 +5,17 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="449.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo3.Newstudent">
+<AnchorPane prefHeight="770.0" prefWidth="1440.0" style="-fx-background-color: #ECFAFF #ECFAFF;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo3.Newstudent">
    <children>
-      <VBox layoutX="18.0" layoutY="30.0" prefHeight="366.0" prefWidth="187.0" spacing="12.0">
+      <VBox layoutX="57.0" layoutY="64.0" prefHeight="366.0" prefWidth="187.0" spacing="18.0">
          <children>
             <Label text="Name">
                <font>
@@ -25,7 +27,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label text="Date of Biirth">
+            <Label text="Date of Birth">
                <font>
                   <Font size="20.0" />
                </font>
@@ -58,7 +60,7 @@
                   <Font size="20.0" />
                </font>
                <padding>
-                  <Insets top="12.0" />
+                  <Insets top="7.0" />
                </padding>
             </Label>
             <Label text="File No.">
@@ -66,7 +68,7 @@
                   <Font size="20.0" />
                </font>
                <padding>
-                  <Insets top="10.0" />
+                  <Insets top="7.0" />
                </padding>
             </Label>
             <Label text="Status">
@@ -79,7 +81,7 @@
             <Insets left="20.0" />
          </padding>
       </VBox>
-      <VBox layoutX="200.0" layoutY="30.0" prefHeight="368.0" prefWidth="197.0" spacing="12.0">
+      <VBox layoutX="243.0" layoutY="65.0" prefHeight="368.0" prefWidth="197.0" spacing="18.0">
          <children>
             <TextField fx:id="studentName" />
             <DatePicker fx:id="admissionDate" prefHeight="26.0" prefWidth="199.0" />
@@ -94,18 +96,34 @@
             </ComboBox>
             <TextArea fx:id="parents" prefHeight="0.0" prefWidth="197.0" />
             <TextField fx:id="fileNo" />
-            <TextField fx:id="status" />
+            <TextField fx:id="status" prefHeight="81.0" prefWidth="215.0" />
          </children>
       </VBox>
-      <Button layoutX="436.0" layoutY="145.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="103.0" prefWidth="276.0" text="Add Student">
+      <Button layoutX="754.0" layoutY="267.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="103.0" prefWidth="276.0" text="Add Student">
          <font>
             <Font size="34.0" />
          </font>
       </Button>
-      <Label fx:id="displayLabel" layoutX="473.0" layoutY="273.0" prefHeight="40.0" prefWidth="225.0">
+      <Label fx:id="displayLabel" layoutX="719.0" layoutY="172.0" prefHeight="40.0" prefWidth="225.0">
          <font>
             <Font size="17.0" />
          </font>
       </Label>
+      <TableView fx:id="table" layoutX="274.0" layoutY="553.0" prefHeight="176.0" prefWidth="987.0">
+        <columns>
+            <TableColumn fx:id="id" prefWidth="57.805419921875" text="Id" />
+          <TableColumn fx:id="name" prefWidth="98.5369873046875" text="Name" />
+          <TableColumn fx:id="admissiondate" prefWidth="113.66339111328125" text="Date of Admission" />
+            <TableColumn fx:id="birthdate" minWidth="6.22174072265625" prefWidth="106.336669921875" text="Birthday" />
+            <TableColumn fx:id="nic" minWidth="0.0" prefWidth="94.6051025390625" text="NIC No:" />
+            <TableColumn fx:id="juvPvt" minWidth="0.0" prefWidth="59.8580322265625" text="JUV/PVT" />
+            <TableColumn fx:id="Training" prefWidth="57.14202880859375" text="Training" />
+            <TableColumn fx:id="Recidence" prefWidth="69.53692626953125" text="Recidence" />
+            <TableColumn fx:id="Parents" prefWidth="159.5057373046875" text="Parents" />
+            <TableColumn fx:id="fileno" prefWidth="49.2003173828125" text="File No" />
+            <TableColumn fx:id="Status" prefWidth="115.4317626953125" text="Status" />
+        </columns>
+      </TableView>
+      <Button layoutX="824.0" layoutY="441.0" mnemonicParsing="false" onAction="#goBackBttn" prefHeight="61.0" prefWidth="140.0" text="Go Back" />
    </children>
 </AnchorPane>
