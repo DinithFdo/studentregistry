@@ -114,24 +114,19 @@ public class Viewstudents implements Initializable {
         ObservableList<Student> selectedStd;
         selectedStd = table.getSelectionModel().getSelectedItems();
 
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,"Delete"+selectedStd.get(0).getName()+" ?", ButtonType.YES,ButtonType.NO,ButtonType.CANCEL);
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,"Delete"+selectedStd.get(0).getName()+" ?", ButtonType.YES,ButtonType.NO);
         confirmationAlert.setHeaderText("Are you sure you want to delete this record?");
         confirmationAlert.showAndWait();
 
         if(confirmationAlert.getResult() == ButtonType.YES){
             try{
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudentRegistry?useSSL=false","root","Dinith20010620");
-
-                Statement stm = con.createStatement();
-                String sql = "DELETE FROM Students WHERE id='"+selectedStd.get(0).getId()+"'";
-                stm.executeUpdate(sql);
-
+                StudentDAO.removeStudent(selectedStd.get(0).getId());
                 Alert deletedAlert  = new Alert(Alert.AlertType.INFORMATION);
                 deletedAlert.setHeaderText("Record Deleted Successfully !");
                 deletedAlert.show();
 
-                table.refresh();
+                ObservableList<Student> stdlist = StudentDAO.getAllRecords();
+                populateTable(stdlist);
 
             }catch (Exception e){
                 System.out.println(e.getMessage());
@@ -139,5 +134,9 @@ public class Viewstudents implements Initializable {
         }
 
         System.out.println(selectedStd.get(0).getId());
+    }
+
+    private void populateTable(ObservableList<Student> stdList){
+        table.setItems(stdList);
     }
 }

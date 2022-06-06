@@ -1,9 +1,6 @@
 package com.example.demo3;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DBUtil {
 
@@ -46,11 +43,11 @@ public class DBUtil {
 
     }
 
-    public static void dbExecuteQuery(String sql) throws SQLException, ClassNotFoundException {
+    public static ResultSet dbExecuteQuery(String sql) throws SQLException, ClassNotFoundException {
         dbConnect();
         Statement st = connection.createStatement();
-        st.executeQuery(sql);
-        dbDisconnect();
+        ResultSet rs = st.executeQuery(sql);
+        return rs;
     }
 
     public static void dbExecuteUpdate(String sql) throws SQLException,ClassNotFoundException{

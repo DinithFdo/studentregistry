@@ -130,38 +130,10 @@ public class Newstudent implements Initializable {
 
         StudentDAO.insertStudent(newstudent.getName(),newstudent.getAdmissionDate(),newstudent.getBirthday(),newstudent.getNICno(),newstudent.getJUVPVT(),newstudent.getTraining(),newstudent.getRecidence(),newstudent.getParents(),newstudent.getFileNo(),newstudent.getStatus());
 
+        ObservableList<Student> stdlist = StudentDAO.getAllRecords();
+        populateTable(stdlist);
+
         displayLabel.setText("Student Successfully Added !");
-//        try{
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudentRegistry?useSSL=false","root","Dinith20010620");
-
-//            Student newstudent = new Student();
-//
-//            newstudent.setName(studentName.getText());
-//            newstudent.setAdmissionDate(admissionDate.getValue());
-//            newstudent.setBirthday(birthday.getValue(),LocalDate.now());
-//            newstudent.setNICno(nicNo.getText());
-//            newstudent.setJUVPVT(juvpvt.getValue());
-//            newstudent.setTraining(training.getValue());
-//            newstudent.setRecidence(recidence.getValue());
-//            newstudent.setParents(parents.getText());
-//            newstudent.setFileNo(Integer.parseInt(fileNo.getText()));
-//            newstudent.setStatus(status.getText());
-
-//            Statement st = con.createStatement();
-//
-//            String sql = "INSERT INTO Students (stdName,admissionDate,birthDay,NICno,JUVPVT,Training,Recidence,Parents,FileNo,Status)" +
-//                    "VALUES ('"+newstudent.getName()+"','"+newstudent.getAdmissionDate()+"','"+newstudent.getBirthday()+"','"+newstudent.getNICno()+"','"+newstudent.getJUVPVT()+"','"+newstudent.getTraining()+"','"+newstudent.getRecidence()+"','"+newstudent.getParents()+"','"+newstudent.getFileNo()+"','"+newstudent.getStatus()+"')";
-//
-//            st.executeUpdate(sql);
-//            displayLabel.setText("Student Successfully Added !");
-//            refresh();
-//
-//
-//        }catch (Exception e){
-//            System.out.println(e.getMessage());
-//        }
-
     }
 
     @FXML
@@ -179,36 +151,9 @@ public class Newstudent implements Initializable {
 
     }
 
-    ObservableList<Student> students = FXCollections.observableArrayList();
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudentRegistry?useSSL=false","root","Dinith20010620");
-
-            Statement st = con.createStatement();
-            String sql = "SELECT * FROM Students WHERE id > (SELECT COUNT(*) FROM StudentRegistry.Students) - 5;";
-
-            ResultSet rs = st.executeQuery(sql);
-
-            while(rs.next()){
-                students.add(new Student(
-                        rs.getInt("id"),
-                        rs.getString("stdName"),
-                        rs.getTimestamp("admissionDate").toLocalDateTime(),
-                        rs.getTimestamp("birthDay").toLocalDateTime(),
-                        rs.getString("NICno"),
-                        rs.getString("JUVPVT"),
-                        rs.getString("Training"),
-                        rs.getString("Recidence"),
-                        rs.getString("Parents"),
-                        rs.getInt("FileNo"),
-                        rs.getString("Status")
-                ));
-            }
-
             id.setCellValueFactory(new PropertyValueFactory<Student,Integer>("id"));
             name.setCellValueFactory(new PropertyValueFactory<Student,String>("name"));
             admissiondate.setCellValueFactory(new PropertyValueFactory<Student,LocalDate>("admissionDate"));
@@ -221,7 +166,8 @@ public class Newstudent implements Initializable {
             fileno.setCellValueFactory(new PropertyValueFactory<Student,Integer>("FileNo"));
             Status.setCellValueFactory(new PropertyValueFactory<Student,String>("Status"));
 
-            table.setItems(students);
+            ObservableList<Student> stdlist = StudentDAO.getAllRecords();
+            populateTable(stdlist);
 
         }catch(Exception e ){
             System.out.println(e.getMessage());
@@ -229,51 +175,8 @@ public class Newstudent implements Initializable {
 
     }
 
-    public void refresh(){
-        try {
-
-            students.removeAll();
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudentRegistry?useSSL=false","root","Dinith20010620");
-
-            Statement st = con.createStatement();
-            String sql = "SELECT * FROM Students WHERE id > (SELECT COUNT(*) FROM StudentRegistry.Students) - 5;";
-
-            ResultSet rs = st.executeQuery(sql);
-
-            while(rs.next()){
-                students.add(new Student(
-                        rs.getInt("id"),
-                        rs.getString("stdName"),
-                        rs.getTimestamp("admissionDate").toLocalDateTime(),
-                        rs.getTimestamp("birthDay").toLocalDateTime(),
-                        rs.getString("NICno"),
-                        rs.getString("JUVPVT"),
-                        rs.getString("Training"),
-                        rs.getString("Recidence"),
-                        rs.getString("Parents"),
-                        rs.getInt("FileNo"),
-                        rs.getString("Status")
-                ));
-            }
-
-            id.setCellValueFactory(new PropertyValueFactory<Student,Integer>("id"));
-            name.setCellValueFactory(new PropertyValueFactory<Student,String>("name"));
-            admissiondate.setCellValueFactory(new PropertyValueFactory<Student,LocalDate>("admissionDate"));
-            birthdate.setCellValueFactory(new PropertyValueFactory<Student,LocalDate>("birthday"));
-            nic.setCellValueFactory(new PropertyValueFactory<Student,String>("NICno"));
-            juvPvt.setCellValueFactory(new PropertyValueFactory<Student,String>("JUVPVT"));
-            Training.setCellValueFactory(new PropertyValueFactory<Student,String>("Training"));
-            Recidence.setCellValueFactory(new PropertyValueFactory<Student,String>("Recidence"));
-            Parents.setCellValueFactory(new PropertyValueFactory<Student,String>("Parents"));
-            fileno.setCellValueFactory(new PropertyValueFactory<Student,Integer>("FileNo"));
-            Status.setCellValueFactory(new PropertyValueFactory<Student,String>("Status"));
-
-            table.setItems(students);
-
-        }catch(Exception e ){
-            System.out.println(e.getMessage());
-        }
-
+    private void populateTable(ObservableList<Student> stdList){
+        table.setItems(stdList);
     }
+
 }

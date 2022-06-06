@@ -16,18 +16,13 @@ public class Homepage {
         Stage stg = new Stage();
         stg.setTitle("Add New Student");
         Parent root = FXMLLoader.load(getClass().getResource("newstudent.fxml"));
-        Scene newscene = new Scene(root,1000,1044);
+        Scene newscene = new Scene(root,1440,770);
         stg.setScene(newscene);
         stg.show();
 
         Stage previousStage = (Stage) ((Node)actionevent.getSource()).getScene().getWindow();
         previousStage.hide();
 
-        try{
-
-        }catch (Exception e){
-
-        }
     }
 
     @FXML
