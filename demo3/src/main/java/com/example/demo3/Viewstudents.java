@@ -5,19 +5,21 @@ import com.mysql.cj.xdevapi.Table;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -60,36 +62,9 @@ public class Viewstudents implements Initializable {
     @FXML
     private TableColumn <Student,String> status;
 
-    ObservableList <Student> students = FXCollections.observableArrayList();
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/StudentRegistry?useSSL=false","root","Dinith20010620");
-
-            Statement st = con.createStatement();
-            String sql = "SELECT * FROM Students";
-
-            ResultSet rs = st.executeQuery(sql);
-
-            while(rs.next()){
-                students.add(new Student(
-                        rs.getInt("id"),
-                        rs.getString("stdName"),
-                        rs.getTimestamp("admissionDate").toLocalDateTime(),
-                        rs.getTimestamp("birthDay").toLocalDateTime(),
-                        rs.getString("NICno"),
-                        rs.getString("JUVPVT"),
-                        rs.getString("Training"),
-                        rs.getString("Recidence"),
-                        rs.getString("Parents"),
-                        rs.getInt("FileNo"),
-                        rs.getString("Status")
-                ));
-
-            }
-
             id.setCellValueFactory(new PropertyValueFactory<Student,Integer>("id"));
             name.setCellValueFactory(new PropertyValueFactory<Student,String>("name"));
             admissionDate.setCellValueFactory(new PropertyValueFactory<Student,LocalDate>("admissionDate"));
@@ -102,7 +77,8 @@ public class Viewstudents implements Initializable {
             fileNo.setCellValueFactory(new PropertyValueFactory<Student,Integer>("FileNo"));
             status.setCellValueFactory(new PropertyValueFactory<Student,String>("Status"));
 
-            table.setItems(students);
+            ObservableList<Student> stdlist = StudentDAO.getAllRecords();
+            populateTable(stdlist);
 
         }catch (Exception e){
             System.out.println(e.getMessage());
@@ -114,7 +90,7 @@ public class Viewstudents implements Initializable {
         ObservableList<Student> selectedStd;
         selectedStd = table.getSelectionModel().getSelectedItems();
 
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,"Delete"+selectedStd.get(0).getName()+" ?", ButtonType.YES,ButtonType.NO);
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION,"Delete "+selectedStd.get(0).getName()+" ?", ButtonType.YES,ButtonType.NO);
         confirmationAlert.setHeaderText("Are you sure you want to delete this record?");
         confirmationAlert.showAndWait();
 
@@ -133,10 +109,48 @@ public class Viewstudents implements Initializable {
             }
         }
 
-        System.out.println(selectedStd.get(0).getId());
+    }
+
+    @FXML
+    protected void editClick() throws IOException, SQLException, ClassNotFoundException {
+
+        ObservableList<Student> selectedStd;
+        selectedStd = table.getSelectionModel().getSelectedItems();
+
+        String sql = "SELECT * FROM STUDENTS WHERE id='"+selectedStd.get(0).getId()+"'";
+
+        ResultSet rs = DBUtil.dbExecuteQuery(sql);
+
+        if(rs.next()){
+            Student editStd = new Student(
+                    rs.getInt("id"),
+                    rs.getString("stdName"),
+                    rs.getTimestamp("admissionDate").toLocalDateTime(),
+                    rs.getTimestamp("birthDay").toLocalDateTime(),
+                    rs.getString("NICno"),
+                    rs.getString("JUVPVT"),
+                    rs.getString("Training"),
+                    rs.getString("Recidence"),
+                    rs.getString("Parents"),
+                    rs.getInt("FileNo"),
+                    rs.getString("Status")
+            );
+
+            Edit.getStudent(editStd);
+        }
+
+        Stage stg = new Stage();
+        stg.setTitle("Edit");
+        Parent root = FXMLLoader.load(getClass().getResource("edit.fxml"));
+        Scene scn = new Scene(root,505,619);
+        stg.setScene(scn);
+        stg.show();
+
+
     }
 
     private void populateTable(ObservableList<Student> stdList){
         table.setItems(stdList);
     }
+
 }

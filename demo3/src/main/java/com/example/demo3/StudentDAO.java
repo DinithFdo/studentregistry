@@ -38,6 +38,31 @@ public class StudentDAO {
 
     }
 
+    public static void updateStudent() throws SQLException,ClassNotFoundException{
+        String sql ="UPDATE Students SET ";
+
+        try{
+            DBUtil.dbExecuteUpdate(sql);
+        }catch (SQLException e){
+            System.out.println("Exception occured while updating the data" +e);
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+    public static ObservableList<Student> getRecords(String sql) throws  SQLException,ClassNotFoundException{
+        try{
+            ResultSet rs = DBUtil.dbExecuteQuery(sql);
+            ObservableList<Student> studentList = getStudentObjects(rs);
+            return studentList;
+
+        }catch(SQLException e){
+            System.out.println("Error occured while fetching the records from the DB");
+            e.printStackTrace();
+            throw e;
+        }
+    }
     public static ObservableList<Student> getAllRecords() throws SQLException,ClassNotFoundException{
 
         String sql = "SELECT * FROM Students";

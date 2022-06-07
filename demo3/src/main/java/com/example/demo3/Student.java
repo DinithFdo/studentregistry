@@ -50,7 +50,7 @@ public class Student {
     }
 
     public void setBirthday(LocalDate birthday,LocalDate now) {
-        if(birthday.isBefore(now)){
+        if(birthday != null && birthday.isBefore(now)){
             this.birthday = birthday;
         }else{
             System.out.println("Birthday cant be same as today!");
